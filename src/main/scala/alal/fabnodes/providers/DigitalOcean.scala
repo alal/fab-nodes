@@ -18,7 +18,7 @@ object DigitalOcean extends Provider {
   val endpointAction= "/v2/droplets/"
   val clientActions = Map("reboot" -> Map("type" -> "power_cycle"),
                           "rebuild" -> Map( "type"-> "rebuild",
-                                            "image" -> "ubuntu-12-04-x64"),
+                                            "image" -> "ubuntu-15-10-x64"),
                           "shutdown" -> Map("type" -> "power_off"),
                           "boot" -> Map("type" -> "power_on")
                           )
@@ -99,7 +99,7 @@ object DigitalOcean extends Provider {
                           .getOrElse(throw new IllegalArgumentException(
                                       "Set ssh key id to env var SSHKEYID!"))
 
-    val regions = "nyc1 nyc2 nyc3 sfo1 sgp1".split(' ')
+    val regions = "nyc2 nyc3 tor1 sgp1 lon1 fra1 ams1".split(' ')
 
     val newNodeNames = makeNames(prefix, start, end)
     println(newNodeNames.mkString("\n"))
@@ -111,7 +111,7 @@ object DigitalOcean extends Provider {
         println(s"${nodeName} at ${region}")
 
         val _json = s"""{"name":"${nodeName}","region":"${region}",""" +
-                     s""""size":"512mb","image":"ubuntu-12-04-x64",""" +
+                     s""""size":"512mb","image":"ubuntu-15-10-x64",""" +
                      s""""ssh_keys":[${sshkeyid}],"backups":false,""" +
                      s""""ipv6":false,"user_data":null,""" +
                      s""""private_networking":null}"""
