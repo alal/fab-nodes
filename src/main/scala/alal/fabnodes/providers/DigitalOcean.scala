@@ -1,5 +1,6 @@
 package alal.fabnodes
 
+import scala.util.control.Breaks._
 import scalaj.http.{HttpRequest, HttpConstants}
 import Util._
 
@@ -11,7 +12,7 @@ object DigitalOcean extends Provider {
   implicit val formats = DefaultFormats
 
   val endpointFrame = "https://api.digitalocean.com"
-  val endpointList = "/v2/droplets?per_page=1000"
+  val endpointList = "/v2/droplets?per_page=200"
   val endpointSshkeys ="/v2/account/keys"
   val endpointCreate = "/v2/droplets"
   val endpointDelete = "/v2/droplets/"
@@ -58,16 +59,23 @@ object DigitalOcean extends Provider {
 
 
   private def _list = {
-    val resp = authReq("GET", endpointList).asString
-    val jResp = parse(resp.body)
-
-    val jNodes = (jResp \ "droplets" )
-
+    var page = 1
+    var total = 0
+    var from = 0
     val nodes = new collection.mutable.ArrayBuffer[Node]
-    for (i <- 0 until (jResp \ "meta" \ "total").extract[Int]) {
-      nodes += JNode2Node(jNodes(i))
-    }
 
+    do{
+      val resp = authReq("GET", endpointList + "&page=" + page).asString
+      val jResp = parse(resp.body)
+      val jNodes = (jResp \ "droplets" )
+      total = (jResp \ "meta" \ "total").extract[Int]
+      breakable { for (i <- 0 until total.min(200)) {
+        nodes += JNode2Node(jNodes(i))
+        from += 1
+        if ( from >= total ) break
+      } }
+      page += 1
+    }while( from < total )
     nodes.toArray
   }
 
@@ -99,7 +107,7 @@ object DigitalOcean extends Provider {
                           .getOrElse(throw new IllegalArgumentException(
                                       "Set ssh key id to env var SSHKEYID!"))
 
-    val regions = "nyc2 nyc3 tor1 sgp1 lon1 fra1 ams1".split(' ')
+    val regions = "nyc2 nyc3 sfo1 nyc1 sgp1".split(' ')
 
     val newNodeNames = makeNames(prefix, start, end)
     println(newNodeNames.mkString("\n"))
