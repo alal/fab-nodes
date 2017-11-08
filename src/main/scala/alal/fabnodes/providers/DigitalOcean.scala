@@ -19,7 +19,7 @@ object DigitalOcean extends Provider {
   val endpointAction= "/v2/droplets/"
   val clientActions = Map("reboot" -> Map("type" -> "power_cycle"),
                           "rebuild" -> Map( "type"-> "rebuild",
-                                            "image" -> "ubuntu-15-10-x64"),
+                                            "image" -> "ubuntu-16-04-x64"),
                           "shutdown" -> Map("type" -> "power_off"),
                           "boot" -> Map("type" -> "power_on")
                           )
