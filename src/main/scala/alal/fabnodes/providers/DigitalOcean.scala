@@ -119,7 +119,7 @@ object DigitalOcean extends Provider {
         println(s"${nodeName} at ${region}")
 
         val _json = s"""{"name":"${nodeName}","region":"${region}",""" +
-                     s""""size":"512mb","image":"ubuntu-15-10-x64",""" +
+                     s""""size":"512mb","image":"ubuntu-16-04-x64",""" +
                      s""""ssh_keys":[${sshkeyid}],"backups":false,""" +
                      s""""ipv6":false,"user_data":null,""" +
                      s""""private_networking":null}"""
