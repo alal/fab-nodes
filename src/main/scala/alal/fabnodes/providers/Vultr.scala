@@ -14,7 +14,7 @@ object Vultr extends Provider {
   val endpointList = "/v1/server/list"
   val endpointSshkeys = "/v1/sshkey/list"
   val endpointCreate = "/v1/server/create"
-  val endpointAction = "v1/server/"
+  val endpointAction = "/v1/server/"
   val clientActions = Map("reboot" -> "reboot",
                           "rebuild" -> "reinstall",
                           "shutdown" -> "halt",
@@ -93,8 +93,8 @@ object Vultr extends Provider {
 
     if (confirm) {
       val formData = collection.mutable.Map[String,String]()
-      formData("VPSPLANID") = "29"
-      formData("OSID") = "128"
+      formData("VPSPLANID") = "201"
+      formData("OSID") = "215"
       formData("SSHKEYID") = sshkeyid
       for ((nodeName, region) <- (newNodeNames
                                   zip List.fill(end)(regions).flatten)){

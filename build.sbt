@@ -1,5 +1,4 @@
-import com.typesafe.sbt.SbtProguard._
-import com.typesafe.sbt.SbtProguard.ProguardKeys.proguard
+enablePlugins(SbtProguard)
 
 name := "fab-nodes"
 
@@ -22,8 +21,7 @@ licenses := Seq("Apache License, Version 2.0" -> url("https://www.apache.org/lic
 homepage := Some(url("https://github.com/alal/fab-nodes"))
 
 
-proguardSettings
-ProguardKeys.options in Proguard ++= Seq("-dontnote", "-dontwarn", "-ignorewarnings")
-ProguardKeys.options in Proguard += ProguardOptions.keepMain("alal.fabnodes.Main")
+proguardOptions in Proguard ++= Seq("-dontnote", "-dontwarn", "-ignorewarnings")
+proguardOptions in Proguard += ProguardOptions.keepMain("alal.fabnodes.Main")
 javaOptions in (Proguard, proguard) += "-Xmx2G"
 javaOptions in (Proguard, proguard) += "-Xss1G"
